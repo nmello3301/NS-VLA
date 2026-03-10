@@ -22,7 +22,7 @@
 - 🔄 **Online RL**: GRPO-based optimization with primitive-segmented rewards for expansive exploration
 
 <p align="center">
-  <img src="assets/framework.png" width="90%" alt="NS-VLA Framework"/>
+  <img src="assets/pipeline.png" width="90%" alt="NS-VLA Framework"/>
 </p>
 
 ## Performance
