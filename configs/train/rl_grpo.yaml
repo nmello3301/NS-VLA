@@ -1,0 +1,12 @@
+# Stage II: Online RL Optimization (NS-GRPO)
+model:
+  checkpoint: "path/to/pretrained"
+  freeze_vlm: true
+  freeze_plan_generator: true
+
+rl:
+  algorithm: "grpo"
+  group_size: 8
+  discount: 0.99
+  kl_weight: 0.01
+  learning_rate: 1.0e-5

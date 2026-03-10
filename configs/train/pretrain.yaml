@@ -1,0 +1,16 @@
+# Stage I: Lightweight Supervised Pretraining
+model:
+  vlm_backbone: "Qwen3-VL-2B"
+  freeze_vlm: true
+  classifier_hidden: 1024
+  solver_layers: 4
+  solver_dim: 512
+  chunk_horizon: 8
+
+training:
+  stage: "pretrain"
+  epochs: 50
+  batch_size: 32
+  learning_rate: 1.0e-4
+  optimizer: "adamw"
+  weight_decay: 0.01

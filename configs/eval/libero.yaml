@@ -1,0 +1,3 @@
+benchmark: "libero"
+eval_episodes: 50
+suites: ["spatial", "object", "goal", "long"]
