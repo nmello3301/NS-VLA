@@ -9,10 +9,8 @@
 [![Dataset](https://img.shields.io/badge/🤗-Dataset-yellow)](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 
-[**Homepage**](https://zuzuzzy.github.io/NS-VLA/) | 
+[**Homepage**](https://zuzuzzy.github.io/NS-VLA/) | [**Paper**](https://arxiv.org/abs/XXXX.XXXXX) | [**Model**](https://huggingface.co/zuzuzzy/NS-VLA) | [**Dataset**](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
 <!-- [**Demo**](https://zuzuzzy.github.io/NS-VLA/demo/) |  -->
-[**Paper**](https://arxiv.org/abs/XXXX.XXXXX) | [**Model**](https://huggingface.co/zuzuzzy/NS-VLA) | [**Dataset**](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
-
 </div>
 
 ## Overview
