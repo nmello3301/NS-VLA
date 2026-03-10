@@ -4,12 +4,14 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-XXXX.XXXXX-b31b1b.svg)](https://arxiv.org/abs/XXXX.XXXXX)
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://zuzuzzy.github.io/NS-VLA/)
-[![Demo](https://img.shields.io/badge/Demo-Online-green)](https://zuzuzzy.github.io/NS-VLA/demo/)
+<!-- [![Demo](https://img.shields.io/badge/Demo-Online-green)](https://zuzuzzy.github.io/NS-VLA/demo/) -->
 [![Model](https://img.shields.io/badge/🤗-Model-yellow)](https://huggingface.co/zuzuzzy/NS-VLA)
 [![Dataset](https://img.shields.io/badge/🤗-Dataset-yellow)](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 
-[**Homepage**](https://zuzuzzy.github.io/NS-VLA/) | [**Demo**](https://zuzuzzy.github.io/NS-VLA/demo/) | [**Paper**](https://arxiv.org/abs/XXXX.XXXXX) | [**Model**](https://huggingface.co/zuzuzzy/NS-VLA) | [**Dataset**](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
+[**Homepage**](https://zuzuzzy.github.io/NS-VLA/) | 
+<!-- [**Demo**](https://zuzuzzy.github.io/NS-VLA/demo/) |  -->
+[**Paper**](https://arxiv.org/abs/XXXX.XXXXX) | [**Model**](https://huggingface.co/zuzuzzy/NS-VLA) | [**Dataset**](https://huggingface.co/datasets/zuzuzzy/NS-VLA-Dataset)
 
 </div>
 
