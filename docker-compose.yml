@@ -1,0 +1,12 @@
+services:
+  nsvla:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: nsvla-jax:latest
+    container_name: nsvla-jax
+    ports:
+      - "8000:8000"
+    environment:
+      NSVLA_HORIZON: "8"
+    restart: unless-stopped
