@@ -99,6 +99,132 @@ bash scripts/eval.sh --benchmark libero --checkpoint path/to/checkpoint
 bash scripts/eval.sh --benchmark calvin --checkpoint path/to/checkpoint
 ```
 
+## Docker JAX Inference API
+
+A containerized JAX wrapper is provided under [`docker/`](docker/) that
+exposes NS-VLA as an HTTP service. It ships a deterministic JAX
+placeholder for the policy — the published model weights are not yet
+released (the files under `nsvla/encoder/`, `nsvla/solver/`, etc. are
+stubbed with *"Code will be released upon paper acceptance"*). The
+wrapper locks in the real I/O contract (image + instruction → action
+chunk + predicted symbolic primitive) so clients, benchmarks, and
+integrations can be built against it today; swap `docker/model.py` for
+the released checkpoint when it lands.
+
+### Build & run
+
+```bash
+# Option A: docker compose
+docker compose up --build
+
+# Option B: plain docker
+docker build -t nsvla-jax -f docker/Dockerfile .
+docker run --rm -p 8000:8000 nsvla-jax
+```
+
+The service listens on `http://localhost:8000`. Configuration:
+
+| Env var         | Default   | Meaning                                 |
+|-----------------|-----------|-----------------------------------------|
+| `NSVLA_HORIZON` | `8`       | Number of future action steps returned. |
+| `NSVLA_PORT`    | `8000`    | Container port (also change `-p`).      |
+
+### API endpoints
+
+All responses are JSON. Interactive docs are auto-generated at
+`http://localhost:8000/docs` (Swagger UI) and
+`http://localhost:8000/redoc`.
+
+#### `GET /health`
+Liveness probe. Returns `{"status": "ok"}`. Used by the Docker
+healthcheck.
+
+#### `GET /info`
+Model and runtime metadata: version, JAX backend/devices, action
+horizon, action dimension, available primitives, and whether real
+weights are loaded.
+
+```bash
+curl -s http://localhost:8000/info
+```
+
+#### `GET /primitives`
+Returns the symbolic primitive vocabulary used by the neuro-symbolic
+encoder (`pick`, `place_on`, `place_in`, `push`, `pull`, `open`,
+`close`, `rotate`, `move_to`, `release`). Clients can use this to map
+predicted primitive IDs to names.
+
+#### `POST /predict`
+Run inference from a JSON body with a base64-encoded image.
+
+Request body:
+```json
+{
+  "instruction": "pick up the red block and place it on the plate",
+  "image_base64": "<base64-encoded RGB image>"
+}
+```
+
+Response:
+```json
+{
+  "primitive": "pick",
+  "primitive_scores": {"pick": 1.23, "place_on": 0.41, "...": 0.0},
+  "actions": [[dx, dy, dz, droll, dpitch, dyaw, gripper], ...],
+  "horizon": 8,
+  "action_dim": 7,
+  "latency_ms": 12.4
+}
+```
+
+- `actions` is a `horizon × 7` chunk of end-effector deltas; the last
+  channel is the gripper command in `[0, 1]`.
+- `primitive` is the top-1 symbolic primitive predicted by the encoder;
+  `primitive_scores` gives raw logits over the full vocabulary.
+
+Example:
+```bash
+python - <<'PY'
+import base64, json, requests
+img = base64.b64encode(open("assets/pipeline.png", "rb").read()).decode()
+r = requests.post("http://localhost:8000/predict", json={
+    "instruction": "pick up the red block",
+    "image_base64": img,
+})
+print(json.dumps(r.json(), indent=2))
+PY
+```
+
+#### `POST /predict/upload`
+Same semantics as `/predict`, but takes `multipart/form-data` — easier
+for `curl` and browsers.
+
+Form fields:
+- `instruction` *(string)* — the task instruction.
+- `image`       *(file)*   — an RGB image file (PNG/JPEG).
+
+```bash
+curl -s -X POST http://localhost:8000/predict/upload \
+  -F "instruction=open the drawer" \
+  -F "image=@assets/pipeline.png"
+```
+
+### Errors
+
+- `400 Bad Request` — malformed base64, unreadable image, or missing
+  fields.
+- `422 Unprocessable Entity` — Pydantic validation error on the JSON
+  body.
+
+### Replacing the placeholder with real weights
+
+When NS-VLA weights are published, replace `NSVLAJaxModel._forward` in
+`docker/model.py` with the Flax/JAX implementation of the encoder +
+solver and load parameters from a checkpoint in
+`NSVLAJaxModel.__init__`. The HTTP surface (`/predict`,
+`/predict/upload`, `/info`, `/primitives`, `/health`) does not need to
+change.
+
 ## Citation
 
 If you find our work useful, please consider citing:
